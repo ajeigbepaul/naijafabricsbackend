@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const userRoute = require("./routes/user");
 const authRoute = require("./routes/auth");
 const productRoute = require("./routes/product");
+const ankaraRoute = require("./routes/ankara");
 const orderRoute = require("./routes/order");
 const cartRoute = require("./routes/cart");
 const payRoute = require("./routes/paystack");
@@ -15,22 +16,20 @@ const statusRoute = require("./routes/status");
 const refreshRoutes = require("./routes/refreshToken");
 const uploadimagesRoute = require("./routes/uploadimages")
 const logOutRoute = require('./routes/logout')
-// const verifyJWT = require("./middleswares/verifyJWT");
 const verifyJwt = require("./middleware/verifyJwt");
-const verifyRoles = require("./middleware/verifyRoles");
-const roles_list = require("./utils/roles_list")
 
 
 
 
 // APP CONNECTION
 const app = express();
-// mongoose.connect(process.env.MONGO_URI,{ useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true, useUnifiedTopology: true });
 // DB CONNECTION
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URL);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.log(conn.connection.host)
+    console.log("Db connected")
   } catch (error) {
     console.log(error);
     process.exit(1);
@@ -47,7 +46,7 @@ app.use(
     extended: true,
   })
 );
-app.use(cors({ credentials: true, origin: "http://localhost:3001" }));
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(cookieParser());
 // TEST ROUTE
 app.get("/",(req,res)=>{res.send("working fine")})
@@ -69,6 +68,7 @@ app.use('/logout',logOutRoute);
 
 // app.use(verifyJwt);
 app.use("/products", productRoute);
+app.use("/ankaras", ankaraRoute);
 app.use("/carts", cartRoute);
 app.use("/orders", orderRoute);
 app.use("/payments", payRoute);
@@ -77,6 +77,9 @@ app.use("/images", uploadimagesRoute)
 // app.use("/uploads", uploadRoute);
 
 // LISTEN
+//  app.listen(process.env.PORT || 8000, () => {
+//    console.log("server running, listening for requests");
+//  });
 connectDB().then(() => {
   app.listen(process.env.PORT || 8000, () => {
     console.log("server running, listening for requests");

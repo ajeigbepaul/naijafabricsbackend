@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
             roles: decoded.roles,
           },
           process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: "30m" }
+          { expiresIn: "15m" }
         );
 
         res.send({

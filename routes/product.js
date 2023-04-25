@@ -53,16 +53,6 @@ router.post(
           res.status(200).send(savedProduct);
         }
       }
-      // const product = new Product({description,
-      //        categories,
-      //       colors,
-      //       size,
-      //      price,
-      //      discount,
-      //      moq,
-      //      instock,})
-      // const savedProduct = await product.save()
-      // res.status(200).send(savedProduct)
     } catch (error) {
       res.status(500).json(error);
     }
