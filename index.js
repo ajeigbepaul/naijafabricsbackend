@@ -11,7 +11,7 @@ const productRoute = require("./routes/product");
 const ankaraRoute = require("./routes/ankara");
 const orderRoute = require("./routes/order");
 const cartRoute = require("./routes/cart");
-const payRoute = require("./routes/paystack");
+const payRoute = require("./routes/pay");
 const statusRoute = require("./routes/status");
 const refreshRoutes = require("./routes/refreshToken");
 const uploadimagesRoute = require("./routes/uploadimages")
@@ -46,7 +46,8 @@ app.use(
     extended: true,
   })
 );
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+// http://localhost:3000
+app.use(cors({ credentials: true, origin: '*' }));
 app.use(cookieParser());
 // TEST ROUTE
 app.get("/",(req,res)=>{res.send("working fine")})

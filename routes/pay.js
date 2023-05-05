@@ -1,12 +1,15 @@
 const Pay = require("../models/Pay");
-const {
-  verifyAuthorizationuser,
-  verifyAuthorizationadmin,
-} = require("./verifyToken");
+const roles_list = require("../utils/roles_list");
+const verifyRoles = require("../middleware/verifyRoles");
+const verifyJwt = require("../middleware/verifyJwt");
 const router = require("express").Router();
 
+// test
+router.get("/pay", verifyJwt, verifyRoles(roles_list.user), (req,res) =>{
+  res.send('testing rolebase payment verification')
+})
 // POST
-router.post("/", verifyAuthorizationuser, async(req, res) => {
+router.post("/", verifyJwt, verifyRoles(roles_list.user), async(req, res) => {
     const newPay = new Pay({
         fullname: req.body.fullname,
         email: req.body.email,
@@ -22,14 +25,19 @@ router.post("/", verifyAuthorizationuser, async(req, res) => {
   });
 
   // GET
-router.get("/getpay", verifyAuthorizationuser, async(req, res) => {
+router.get(
+  "/getpay",
+  verifyJwt,
+  verifyRoles(roles_list.user),
+  async (req, res) => {
     try {
-        const allpay = await Pay.find();
-    
-        res.status(200).json(allpay);
-      } catch (error) {
-        res.status(500).json(error);
-      }
-  });
+      const allpay = await Pay.find();
+
+      res.status(200).json(allpay);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+);
 
 module.exports = router;
